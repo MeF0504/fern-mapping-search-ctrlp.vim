@@ -16,7 +16,7 @@ function! fern#scheme#file#mapping#search_ctrlp#reveal(action, line)
     let find_file = fnamemodify(a:line, ':p')
     call ctrlp#exit()
     execute "FernReveal "..find_file
-    call call('ctrlp#acceptfile', [a:action, a:line])
+    " call call('ctrlp#acceptfile', [a:action, a:line])
 endfunction
 
 function! s:map_search_ctrlp(helper, ...) abort
