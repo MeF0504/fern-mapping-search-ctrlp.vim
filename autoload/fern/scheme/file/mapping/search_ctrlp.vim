@@ -12,7 +12,22 @@ function! s:call(name, ...) abort
         \)
 endfunction
 
+function! fern#scheme#file#mapping#search_ctrlp#reveal(action, line)
+    let find_file = fnamemodify(a:line, ':p')
+    call ctrlp#exit()
+    execute "FernReveal "..find_file
+    call call('ctrlp#acceptfile', [a:action, a:line])
+endfunction
+
 function! s:map_search_ctrlp(helper, ...) abort
+    if exists('g:ctrlp_open_func')
+        let old_ctrlp_open_func = g:ctrlp_open_func
+        let open_func_exists = 1
+    else
+        let open_func_exists = 0
+    endif
+    let g:ctrlp_open_func = {'files': 'fern#scheme#file#mapping#search_ctrlp#reveal'}
+
     if a:0 == 0
         let is_root = get(g:, 'fern_search_ctrlp_root', 0)
     else
@@ -27,5 +42,11 @@ function! s:map_search_ctrlp(helper, ...) abort
         endif
     endif
     execute printf('CtrlP %s', fnameescape(path))
+
+    if open_func_exists == 1
+        let g:ctrlp_open_func = old_ctrlp_open_func
+    else
+        unlet g:ctrlp_open_func
+    endif
 endfunction
 
