@@ -13,9 +13,12 @@ function! s:call(name, ...) abort
 endfunction
 
 function! fern#scheme#file#mapping#search_ctrlp#reveal(action, line)
-    let find_file = fnamemodify(a:line, ':p')
+    " let find_file = fnamemodify(a:line, ':p')
+    " to support symbolic link.
+    let find_file = fnameescape(s:path..'/'..a:line)
     call ctrlp#exit()
     execute "FernReveal "..find_file
+    " do not open
     " call call('ctrlp#acceptfile', [a:action, a:line])
 endfunction
 
@@ -34,14 +37,14 @@ function! s:map_search_ctrlp(helper, ...) abort
         let is_root = a:1
     endif
     if is_root == 1
-        let path = a:helper.sync.get_root_node()._path
+        let s:path = a:helper.sync.get_root_node()._path
     else
-        let path = a:helper.sync.get_cursor_node()._path
-        if !isdirectory(path)
-            let path = fnamemodify(path, ':h')
+        let s:path = a:helper.sync.get_cursor_node()._path
+        if !isdirectory(s:path)
+            let s:path = fnamemodify(s:path, ':h')
         endif
     endif
-    execute printf('CtrlP %s', fnameescape(path))
+    execute printf('CtrlP %s', fnameescape(s:path))
 
     if open_func_exists == 1
         let g:ctrlp_open_func = old_ctrlp_open_func
