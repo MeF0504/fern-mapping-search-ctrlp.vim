@@ -17,9 +17,10 @@ function! fern#scheme#file#mapping#search_ctrlp#reveal(action, line)
     " to support symbolic link.
     let find_file = fnameescape(s:path..'/'..a:line)
     call ctrlp#exit()
-    execute "FernReveal "..find_file
-    " do not open
-    " call call('ctrlp#acceptfile', [a:action, a:line])
+    execute printf("FernReveal %s", find_file)
+    if get(g:, 'fern_search_ctrlp_open_file', 0)
+        call call('ctrlp#acceptfile', [a:action, a:line])
+    endif
 endfunction
 
 function! s:map_search_ctrlp(helper, ...) abort
@@ -46,7 +47,7 @@ function! s:map_search_ctrlp(helper, ...) abort
     endif
     execute printf('CtrlP %s', fnameescape(s:path))
 
-    if open_func_exists == 1
+    if open_func_exists
         let g:ctrlp_open_func = old_ctrlp_open_func
     else
         unlet g:ctrlp_open_func
