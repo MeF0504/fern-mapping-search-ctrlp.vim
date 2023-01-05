@@ -29,6 +29,19 @@ function! s:map_search_ctrlp(helper, ...) abort
     endif
     let g:ctrlp_open_func = {'files': 'fern#scheme#file#mapping#search_ctrlp#reveal'}
 
+    if exists('g:ctrlp_show_hidden')
+        let old_ctrlp_show_hidden = g:ctrlp_show_hidden
+        let hidden_exists = 1
+    else
+        let hidden_exists = 0
+    endif
+    let g:ctrlp_show_hidden = b:fern.hidden
+    if exists("b:fern_search_ctrlp_hidden") &&
+       \ (b:fern_search_ctrlp_hidden != b:fern.hidden)
+        CtrlPClearCache
+    endif
+    let b:fern_search_ctrlp_hidden = g:ctrlp_show_hidden
+
     if a:0 == 0
         let is_root = get(g:, 'fern_search_ctrlp_root', 0)
     else
@@ -48,6 +61,11 @@ function! s:map_search_ctrlp(helper, ...) abort
         let g:ctrlp_open_func = old_ctrlp_open_func
     else
         unlet g:ctrlp_open_func
+    endif
+    if hidden_exists
+        let g:ctrlp_show_hidden = old_ctrlp_show_hidden
+    else
+        unlet g:ctrlp_show_hidden
     endif
 endfunction
 
