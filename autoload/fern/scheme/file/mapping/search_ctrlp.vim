@@ -18,9 +18,6 @@ function! fern#scheme#file#mapping#search_ctrlp#reveal(action, line)
     let find_file = fnameescape(s:path..'/'..a:line)
     call ctrlp#exit()
     execute printf("FernReveal %s", find_file)
-    if get(g:, 'fern_search_ctrlp_open_file', 0)
-        call call('ctrlp#acceptfile', [a:action, a:line])
-    endif
 endfunction
 
 function! s:map_search_ctrlp(helper, ...) abort

@@ -17,5 +17,6 @@ This plugin automatically add the following actions to `file` scheme.
 
 ## Options
 
-- `g:fern_search_ctrlp_root` set the default search path. If it is set 1, search files at root directory.
-- `g:fern_search_ctrlp_open_file` If it is set 1, open the found file in the process of ctrlp.
+- `g:fern_search_ctrlp_root` (number)  
+    Set the default search path. If set 1, search files from the root node directory.  
+    default: 0
